@@ -1,7 +1,8 @@
+.DEFAULT_GOAL := all
 .KEEP_STATE:
 
 OBJECT_DIR = ObjectDir
-HELPER_DIR = helper_functions
+HELPER_DIR = Helper_functions
 
 CPP          = g++
 NVCC        = /usr/local/cuda-12.1/bin/nvcc
@@ -28,7 +29,16 @@ LIBS        =
 SEQ_HELP_OBJ = $(OBJECT_DIR)/main_sec.o $(OBJECT_DIR)/file_io.o $(OBJECT_DIR)/util.o 
 CUDA_HELP_OBJ = $(OBJECT_DIR)/main_gpu.o  $(OBJECT_DIR)/file_io.o $(OBJECT_DIR)/util.o $(OBJECT_DIR)/error.o $(OBJECT_DIR)/alloc.o $(OBJECT_DIR)/seq_kmeans.o
 
-all: kmeans_seq kmeans_cuda_naive kmeans_cuda_transpose kmeans_cuda_shared kmeans_cuda_all_gpu kmeans_cuda_all_gpu_delta_reduction
+# The delta-reduction source is unfinished scaffolding; keep it opt-in.
+.PHONY: all clean experimental
+all: kmeans_seq kmeans_cuda_naive kmeans_cuda_transpose kmeans_cuda_shared kmeans_cuda_all_gpu
+experimental: kmeans_cuda_all_gpu_delta_reduction
+
+# All compilation targets need a writable object directory, including fresh clones.
+$(SEQ_HELP_OBJ) $(CUDA_HELP_OBJ) $(OBJECT_DIR)/cuda_kmeans_naive.o $(OBJECT_DIR)/cuda_kmeans_transpose.o $(OBJECT_DIR)/cuda_kmeans_shared.o $(OBJECT_DIR)/cuda_kmeans_all_gpu.o $(OBJECT_DIR)/cuda_kmeans_all_gpu_delta_reduction.o: | $(OBJECT_DIR)
+
+$(OBJECT_DIR):
+	mkdir -p "$@"
 
 #---------------------------------------------------------------------
 
