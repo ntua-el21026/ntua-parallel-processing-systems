@@ -57,4 +57,4 @@ Before timing a new OpenMP/CUDA/MPI variant, compare its result against the seri
 
 ## Team and starter code
 
-The final report credits **Michail-Athanasios Peppas and Andreas Saounatsos**. Implementations build on NTUA CSLab starter code; retain all file-level notices, including Vasileios Karakasis/CSLab attribution in `a5/Helper_functions/alloc.c`.
+The final report credits **Michail Athanasios Peppas and Andreas Saounatsos**. Implementations build on NTUA CSLab starter code; retain all file-level notices, including Vasileios Karakasis/CSLab attribution in `a5/Helper_functions/alloc.c`.

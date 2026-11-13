@@ -1,6 +1,6 @@
 # Historical lab-access helpers
 
-These four Bash scripts were used to transfer work between a WSL workstation, Orion, and Scirouter for the NTUA Parallel Processing Systems course. They preserve the original **Michail-Athanasios Peppas / parlab05** workflow (2025), with site-specific accounts and paths. They are not required for local source inspection or compilation.
+These four Bash scripts were used to transfer work between a WSL workstation, Orion, and Scirouter for the NTUA Parallel Processing Systems course. They preserve the original **Michail Athanasios Peppas / parlab05** workflow (2025), with site-specific accounts and paths. They are not required for local source inspection or compilation.
 
 | Script | Behavior | Required local configuration |
 | --- | --- | --- |
