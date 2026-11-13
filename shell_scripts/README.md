@@ -19,5 +19,3 @@ bash shell_scripts/push_to_orion.sh <source_dir> [destination_name]
 ```
 
 Both transfer scripts create the destination directory over SSH and use `scp -Crp` to preserve permissions/timestamps and request compression. They copy into an existing destination and may overwrite same-named files; they are not transactional synchronization tools. The optional destination name defaults to the source basename. The mount helper requires SSHFS and a suitable FUSE setup; key authentication must be configured separately.
-
-No remote connection or transfer is needed for the documentation workflow. Keep mounted home directories, private keys, and local credentials outside Git. The scripts and original paths are preserved as historical workflow evidence; no remote access was tested during this update.

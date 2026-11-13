@@ -26,7 +26,7 @@ directory writable and keep new logs separate from historical results.
 
 `make all NVCC=/path/to/nvcc` includes the four implemented CUDA variants listed
 above. CUDA architecture flags remain historical (`sm_60`) and require review
-for the actual toolkit/GPU; no GPU compatibility was validated in preparation.
+for the actual toolkit/GPU.
 `cuda_kmeans_all_gpu_delta_reduction.cu` has unfinished thread-index/reduction
 scaffolding and is excluded from `all`. `make experimental` is explicitly opt-in
 for investigation, without an algorithmic correctness claim.

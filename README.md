@@ -51,12 +51,10 @@ The existing CPU-only regression suite uses temporary build/output directories:
 python3 -m unittest discover -s tests -v
 ```
 
-It contains two tests: a tiny serial K-means build/run and inspection of the default build graph. It does not execute CUDA, MPI, queue jobs, or concurrent-list correctness tests. This documentation update inspected Makefile expansion and source/scripts; no numerical experiment or performance suite was executed.
+It contains two tests: a tiny serial K-means build/run and inspection of the default build graph. It does not execute CUDA, MPI, queue jobs, or concurrent-list correctness tests.
 
 Before timing a new OpenMP/CUDA/MPI variant, compare its result against the serial/reference implementation using the declared validation mode and tolerance. Record compiler flags, source/configuration/input hashes, random initialization, process/thread counts, hardware/topology, and repeated measurements. Queue logs and reports support only their original workload/hardware settings.
 
-## Team, provenance, and licensing
+## Team and starter code
 
-The final report credits **Michail-Athanasios Peppas and Andreas Saounatsos**. Implementations build on NTUA CSLab starter code; retain all file-level notices, including Vasileios Karakasis/CSLab attribution in `a5/Helper_functions/alloc.c`. Per-person ownership has not been reconstructed from the imported tree. Handouts, lectures, and external source material retain their respective rights. The root [MIT license](LICENSE) covers original contributions only within the authors' rights.
-
-An earlier review recorded a deleted lab-access file in historical commits. Its password must be treated as exposed until the owner confirms revocation/rotation, including reuse. This documentation update did not retrieve, test, print, restore, or rewrite that historical content. The existing qualification remains unresolved; no credential remediation or visibility change was performed.
+The final report credits **Michail-Athanasios Peppas and Andreas Saounatsos**. Implementations build on NTUA CSLab starter code; retain all file-level notices, including Vasileios Karakasis/CSLab attribution in `a5/Helper_functions/alloc.c`.
