@@ -8,7 +8,7 @@ This assignment moves K-means clustering to NVIDIA GPUs using CUDA. The goal is 
 - Shared-memory centroids to reduce global memory traffic.
 - Full GPU version with atomics for centroid updates.
 
-The report in `../docs/reports/individual/a5/` walks through each kernel variant and the performance analysis.
+The [assignment report](../docs/reports/individual/a5/) walks through each kernel variant and the performance analysis.
 
 ## Contents
 - `cuda_kmeans_naive.cu`, `cuda_kmeans_transpose.cu`, `cuda_kmeans_shared.cu`, `cuda_kmeans_all_gpu.cu`: kernel variants.
@@ -35,3 +35,5 @@ Run the repository's bounded CPU/build regressions with
 `python3 -m unittest discover -s tests -v` from the root. These checks do not run
 the GPU kernels. Preserve CSLab/helper-code notices and validate against serial
 before measuring any newly supported GPU variant.
+
+See the [repository guide](../README.md) for toolchain separation, PBS assumptions, attribution, and measurement limits.

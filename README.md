@@ -1,35 +1,62 @@
-# Parallel_Processing_Systems
+# NTUA Parallel Processing Systems
 
-Coursework and lab assignments from the Parallel Processing Systems course (NTUA ECE). The repository spans shared-memory, GPU, and distributed-memory programming in C/CUDA with OpenMP and MPI, plus benchmarking scripts and reports.
+Six NTUA ECE assignments in C/CUDA covering shared-memory parallelism, synchronization, GPU kernels, and distributed-memory programming. Source, scheduler scripts, benchmark logs, diagrams, and original reports are retained together.
 
-## Repository structure
-- `a1/`: OpenMP Game of Life (introductory parallelization and timing).
-- `a2/`: OpenMP K-means and Floyd-Warshall (shared-memory optimization).
-- `a3/`: K-means with multiple lock implementations to study synchronization costs.
-- `a4/`: Concurrent sorted linked list with coarse/fine/optimistic/lazy/lock-free variants.
-- `a5/`: CUDA K-means with progressively optimized GPU kernels.
-- `a6/`: MPI K-means and 2D heat transfer (Jacobi and related solvers).
-- `docs/`: assignment PDFs, lecture slides, and reports.
-- `shell_scripts/`: helper scripts for running on the lab infrastructure.
+## Assignment guide
 
-Each assignment directory contains its own `README.md` with the specific task description, key files, and outputs. The detailed methodology and results are captured in `docs/reports/`.
+| Assignment | Implemented workloads | Execution requirements |
+| --- | --- | --- |
+| [a1: Game of Life](a1/README.md) | OpenMP grid updates and timing | GCC with OpenMP |
+| [a2: K-means and Floyd–Warshall](a2/README.md) | Shared-memory clustering, reduction, and shortest-path variants | GCC with OpenMP |
+| [a3: Synchronization costs](a3/README.md) | K-means with critical sections, pthread mutex/spin, TAS/TTAS, array, and CLH locks | GCC, OpenMP, and pthreads |
+| [a4: Concurrent sorted list](a4/README.md) | Serial, coarse/fine-grained, optimistic, lazy, and nonblocking variants | GCC and pthreads; Linux affinity helpers |
+| [a5: CUDA K-means](a5/README.md) | Serial reference, naive, transpose, shared-memory, and full-GPU variants | G++ for serial; compatible NVIDIA GPU/toolkit for CUDA |
+| [a6: MPI](a6/README.md) | Distributed K-means and heat-transfer solvers | MPI compiler/runtime; GCC for serial references |
 
-## Team, provenance and release status
+[Course material and reports](docs/README.md) explain methodology and historical results. Each component guide links its implementation and evidence. The `benchmarks/`, `Execution_logs/`, and report directories retain original measurements; do not replace them during a new run.
 
-The final report credits Michail-Athanasios Peppas and Andreas Saounatsos. The project combines team implementations with NTUA CSLab starter code; retain all file-level notices, including Vasileios Karakasis/CSLab attribution in `a5/Helper_functions/alloc.c`. Per-person ownership has not been reconstructed from the imported tree. Handouts, lecture slides and external source assets need their own redistribution review; the root MIT notice covers original contributions only within the authors' rights.
+## Build requirements and entry points
 
-This is a conditional public systems showcase. A deleted lab-access file remains reachable in historical commits. Its password must be treated as exposed until the owner confirms revocation/rotation, including any reuse. It was not tested, printed, restored, or rewritten out of history during preparation. A current-file cleanup does not resolve that historical exposure.
+```bash
+git clone https://github.com/ntua-el21026/ntua-parallel-processing-systems.git
+cd ntua-parallel-processing-systems
+```
 
-## Local setup and supported execution
+There is no repository-wide build. From the repository root, select the relevant component:
 
-Use Linux, GCC/G++ and make for the CPU exercises; OpenMP requires the compiler's OpenMP runtime. Assignment 5 additionally needs a compatible NVIDIA CUDA toolkit/GPU, and Assignment 6 needs an MPI toolchain. Inspect each Makefile and scheduler script before use: lab account/module/path settings are site-specific and not a portable environment specification. Do not run queue submission scripts as part of setup.
+| Component | Build command | Principal targets |
+| --- | --- | --- |
+| Game of Life | `make -C a1` | `life_par` |
+| OpenMP K-means | `make -C a2/kmeans` | `seq_kmeans`, `omp_naive_kmeans`, `omp_reduction_kmeans` |
+| Floyd–Warshall | `make -C a2/FW` | `fw`, `fw_sr_p`, `fw_tiled` |
+| K-means locks | `make -C a3` | `kmeans_omp_*` variants listed in its Makefile |
+| Concurrent list | `make -C a4/conc_ll` | `x.serial`, `x.cgl`, `x.fgl`, `x.opt`, `x.lazy`, `x.nb` |
+| Serial CUDA-assignment reference | `make -C a5 kmeans_seq` | `kmeans_seq`, using `Helper_functions/` and `ObjectDir/` |
+| MPI K-means | `make -C a6/kmeans` | `kmeans_mpi` |
+| MPI heat transfer | `make -C a6/heat_transfer/mpi` | `jacobi_mpi`, `gauss_mpi`, `redblack_mpi` |
 
-The CPU-only regression suite creates temporary build/output directories and never invokes CUDA or a scheduler:
+CPU shared-memory components need the appropriate OpenMP/pthread support; MPI components need `mpicc` and a compatible launcher. Assignment 5's `make all NVCC=/path/to/nvcc` includes four implemented CUDA variants, with historical `sm_60` flags requiring review against the actual toolkit/GPU. The unfinished delta-reduction source is deliberately available only via `make experimental`; it has no supported correctness or performance claim.
+
+## Scheduler and infrastructure assumptions
+
+The `make_on_queue.sh`/`run_on_queue.sh` scripts target the course's PBS environment, with `#PBS` resource requests, `module load` commands, lab-account paths, and sometimes fixed output filenames. Assignment 6's K-means runner requests eight nodes/eight processes per node, loads `openmpi/1.8.3`, and uses a site-specific `--mca btl tcp,self` option. These are historical execution assumptions, not a portable cluster configuration. The serial heat-transfer `make_on_queue.sh` and `run_on_queue.sh` still contain literal `cd <FIX PATH>` placeholders and fail Bash syntax checking until adapted in a local copy.
+
+Review paths, modules, resource limits, process/thread counts, and output destinations before submitting any job. Do not submit benchmark matrices as part of installation. [SSH/SSHFS helpers](shell_scripts/README.md) also contain original WSL/lab-account paths and require local adaptation; they are not needed to inspect or build the source.
+
+## Validation and measurement
+
+The existing CPU-only regression suite uses temporary build/output directories:
 
 ```bash
 python3 -m unittest discover -s tests -v
 ```
 
-It builds and executes a tiny serial K-means case and checks the default build dependency graph. Assignment 5 now uses the actual `Helper_functions` path on case-sensitive filesystems and creates the object directory for a fresh build. `make -C a5 kmeans_seq` is the CPU target; `make -C a5 all NVCC=/path/to/nvcc` builds the implemented CPU/CUDA set. The unfinished delta-reduction kernel is available only through explicit `experimental`; it is not a supported correctness/performance implementation.
+It contains two tests: a tiny serial K-means build/run and inspection of the default build graph. It does not execute CUDA, MPI, queue jobs, or concurrent-list correctness tests. This documentation update inspected Makefile expansion and source/scripts; no numerical experiment or performance suite was executed.
 
-Before timing a GPU/MPI/OpenMP variant, compare with its serial/reference result under the declared validation mode and tolerance. Record compiler flags, exact source/configuration, random input provenance, process/thread counts, hardware/topology and repeated measurements. Historical queue logs/reports remain evidence of their original runs; preparation did not rerun GPU/MPI or certify general performance claims.
+Before timing a new OpenMP/CUDA/MPI variant, compare its result against the serial/reference implementation using the declared validation mode and tolerance. Record compiler flags, source/configuration/input hashes, random initialization, process/thread counts, hardware/topology, and repeated measurements. Queue logs and reports support only their original workload/hardware settings.
+
+## Team, provenance, and licensing
+
+The final report credits **Michail-Athanasios Peppas and Andreas Saounatsos**. Implementations build on NTUA CSLab starter code; retain all file-level notices, including Vasileios Karakasis/CSLab attribution in `a5/Helper_functions/alloc.c`. Per-person ownership has not been reconstructed from the imported tree. Handouts, lectures, and external source material retain their respective rights. The root [MIT license](LICENSE) covers original contributions only within the authors' rights.
+
+An earlier review recorded a deleted lab-access file in historical commits. Its password must be treated as exposed until the owner confirms revocation/rotation, including reuse. This documentation update did not retrieve, test, print, restore, or rewrite that historical content. The existing qualification remains unresolved; no credential remediation or visibility change was performed.

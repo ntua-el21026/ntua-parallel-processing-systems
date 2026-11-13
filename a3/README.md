@@ -7,7 +7,7 @@ This assignment studies mutual exclusion overheads in a shared-memory setting by
 - Evaluate scaling and lock contention across 1-64 threads.
 - Automate benchmarks and generate comparison plots.
 
-The report in `../docs/reports/individual/a3/` details the lock implementations and performance comparisons.
+The [assignment report](../docs/reports/individual/a3/) details the lock implementations and performance comparisons.
 
 ## Contents
 - `omp_critical_kmeans.c`, `omp_lock_kmeans.c`, `omp_naive_kmeans.c`: OpenMP variants.
@@ -15,3 +15,5 @@ The report in `../docs/reports/individual/a3/` details the lock implementations 
 - `benchmarks/`: per-lock timing outputs.
 - `diagrams/`: plots comparing lock strategies.
 - `Makefile`, `run_on_queue.sh`, `make_on_queue.sh`: build and queue scripts.
+
+See the [repository guide](../README.md) for toolchain separation, PBS assumptions, attribution, and measurement limits.

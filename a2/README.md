@@ -7,9 +7,11 @@ This assignment explores parallelization and optimization on shared-memory syste
 - Floyd-Warshall: explore serial, striped, and tiled approaches to improve locality and parallelism.
 - Collect timing data and compare scalability across thread counts.
 
-The report in `../docs/reports/individual/a2/` summarizes the OpenMP design choices, affinity policies, and performance results.
+The [assignment report](../docs/reports/individual/a2/) summarizes the OpenMP design choices, affinity policies, and performance results.
 
 ## Contents
 - `kmeans/`: OpenMP K-means implementations, build scripts, and benchmarks.
 - `FW/`: Floyd-Warshall implementations (`fw.c`, `fw_sr.c`, `fw_sr_p.c`, `fw_tiled.c`), plus queue scripts and benchmarks.
 - `docs/`: assignment PDFs for reference.
+
+See the [repository guide](../README.md) for toolchain separation, PBS assumptions, attribution, and measurement limits.

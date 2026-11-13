@@ -7,10 +7,12 @@ This assignment focuses on concurrent data structures. The target workload is a 
 - Measure throughput under different workloads and thread counts.
 - Analyze contention and scalability trade-offs.
 
-The report in `../docs/reports/individual/a4/` documents the synchronization strategies and benchmark results.
+The [assignment report](../docs/reports/individual/a4/) documents the synchronization strategies and benchmark results.
 
 ## Contents
 - `conc_ll/`: implementations and build/run scripts for each synchronization method.
 - `benchmarks/`: throughput measurements.
 - `diagrams/`: performance plots.
 - `docs/`: assignment PDFs.
+
+See the [repository guide](../README.md) for toolchain separation, PBS assumptions, attribution, and measurement limits.
